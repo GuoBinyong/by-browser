@@ -16,6 +16,9 @@ export function isEqualOfJSON(value1, value2) {
 
 
 
+  //遍历优化：开始
+
+
 /**
  * multipleLoop(option)=> stopLoop()
  * 多次遍历、分批循环；可以把一个大遍历分成若干个小遍历来完成；
@@ -129,6 +132,63 @@ export function multipleLoop({loopCall,complete,stepComplete,thisValue,total=Num
   return stopLoop;
 };
 
+
+let arrayPropertyDescriptors = {
+
+
+  /**
+   * multipleLoop(option)=> stopLoop()
+   * 多次遍历、分批循环；可以把一个大遍历分成若干个小遍历来完成；
+   * @param option : {loopCall,complete,stepComplete,thisValue,step,delay}   选项对象
+   * @property option.loopCall : (currentValue,index,stepCount,arr)=>stopInfo : any  必选；每次循环的回调函数；入参 currentValue : Item  当前index对应数组元素； 入参  index : number  表示当前循环的 index，从0开始；入参 stepCount : number  表示已经遍历的批数、周期数；入参 arr:Array 当前被循环的数组； 返回 stopInfo : any 停止循环并返回停止相关的信息；
+   * @property option.stepComplete ？ : (index,stepCount,arr)=>stopInfo : any  可选；每批循环完成时的回调函数；入参  index : number  表示当前循环的 index，从0开始；入参 stepCount : number  表示已经遍历的批数、周期数；入参 arr: Array 被循环的数组，即当前数组； 返回 stopInfo : any 停止循环并返回停止相关的信息；
+   * @property option.complete ？: (stopInfo,index,stepCount,arr)=>Void  可选；循环结束时的回调函数；入参 stopInfo : any 停止循环遍历时停止信息；入参  index : number  表示最后一次循环的 index，如果值为-1 表示没有进行过循环值终止了；入参 stepCount : number  表示已经遍历的批数、周期数；入参 arr: Array 被循环的数组，即当前数组；
+   * @property option.thisValue ? : any   可选；默认值：当前数组； loopCall、complete、stepComplete  回调函数的this的值；
+   * @property option.step ? : number    可选； 默认值： 50 ； 设置每次遍历的循环次数；
+   * @property option.delay ? : Timestamp   可选；默认值 ：0 ； 设置再次遍历的间隔时间；
+   * @returns stopLoop : (stopInfo)=>Void    停止循环的函数；调用该函数，会终止正在进行的循环； 入参 stopInfo : any 停止循环的相关信息
+   */
+  multipleLoop: {
+    enumerable: false,
+    value: function ({loopCall,complete,stepComplete,thisValue,step,delay}) {
+
+      if (thisValue){
+        thisValue = this;
+      }
+
+      let loopOpt = {
+        loopCall:(index,stepCount,total)=> {
+          return loopCall.call(thisValue,this[index],index,stepCount,this);
+        },
+        total:this.length,
+        step:step,
+        delay:delay
+      };
+
+      if (complete){
+        loopOpt.complete = (stopInfo,index,stepCount,total)=>{
+          return complete.call(thisValue,stopInfo,index,stepCount,this);
+        };
+      }
+
+      if (stepComplete){
+        loopOpt.stepComplete = (index,stepCount,total)=>{
+          return stepComplete.call(thisValue,index,stepCount,this);
+        };
+      }
+
+
+      return multipleLoop(loopOpt);
+    }
+  }
+
+};
+
+  Object.defineProperties(Array.prototype, arrayPropertyDescriptors);
+
+
+
+  //遍历优化：结束
 
 
 
