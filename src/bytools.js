@@ -578,6 +578,7 @@ export function createUniqueIdentifier() {
 }
 
 
+// dom: dom 相关的方法
 /**
  * 加载脚本文件
  * @param scriptProps : src | ScriptPropObj   脚本元素的 src 属性值，或脚本元素的属性配置对象
