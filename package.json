@@ -4,6 +4,7 @@
   "description": "bytools 提供了对 JS 中原生类型功能的扩展（如Object、Array、JSON、String、Number、Math、Date、Promise、URL、URLSearchParams 等等），也提供了一些工具函数；",
   "main": "dist/bytools.js",
   "module": "src/bytools.js",
+  "types": "src/index.d.ts",
   "sideEffects": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
