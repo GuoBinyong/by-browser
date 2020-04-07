@@ -37,9 +37,10 @@
   "author": "郭斌勇",
   "license": "ISC",
   "files": [
-    "src/*",
-    "prod/*",
-    "dist/*"
+    "src/[^.]*",
+    "types/[^.]*",
+    "prod/[^.]*",
+    "dist/[^.]*"
   ],
   "devDependencies": {
     "@babel/core": "^7.8.7",
