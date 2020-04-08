@@ -1,9 +1,9 @@
 {
-  "name": "bytools",
+  "name": "by-browser",
   "version": "1.0.0",
-  "description": "bytools 提供了对 JS 中原生类型功能的扩展（如Object、Array、JSON、String、Number、Math、Date、Promise、URL、URLSearchParams 等等），也提供了一些工具函数；",
-  "main": "dist/bytools.js",
-  "module": "src/bytools.js",
+  "description": "by-browser 包含了 es-expand、dom-expand、bom-expand、com-tools、bro-tools 等，提供了浏览器中原生类型功能的扩展 和 一些实用的工具函数",
+  "main": "dist/byBrowser.js",
+  "module": "src/index.js",
   "types": "src/index.d.ts",
   "sideEffects": true,
   "scripts": {
@@ -14,25 +14,26 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/GuoBinyong/bytools"
+    "url": "https://github.com/GuoBinyong/by-browser"
   },
   "keywords": [
     "扩展",
+    "工具",
     "JS扩展",
-    "JS原生扩展",
+    "JS工具",
     "JavaScript扩展",
-    "JavaScript原生扩展",
-    "原生扩展",
-    "Object",
-    "Array",
-    "JSON",
-    "String",
-    "Number",
-    "Math",
-    "Date",
-    "Promise",
-    "URL",
-    "URLSearchParams"
+    "JavaScript工具",
+    "expand",
+    "tools",
+    "JS expand",
+    "JS tools",
+    "JavaScript expand",
+    "JavaScript tools",
+    "es-expand",
+    "dom-expand",
+    "bom-expand",
+    "com-tools",
+    "bro-tools"
   ],
   "author": "郭斌勇",
   "license": "ISC",
@@ -81,6 +82,7 @@
     "webpack": "^4.42.0",
     "webpack-bundle-analyzer": "^3.6.0",
     "webpack-cli": "^3.3.11",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^4.2.2",
+    "webpack-node-externals": "^1.7.2"
   }
 }
