@@ -1,9 +1,9 @@
 {
   "name": "by-browser",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "by-browser 包含了 es-expand、dom-expand、bom-expand、com-tools、bro-tools 等，提供了浏览器中原生类型功能的扩展 和 一些实用的工具函数",
-  "main": "dist/byBrowser.js",
-  "module": "src/index.js",
+  "main": "dist/byBrowser",
+  "module": "src/index",
   "types": "src/index.d.ts",
   "sideEffects": true,
   "scripts": {
@@ -45,6 +45,15 @@
   ],
   "devDependencies": {
     "@babel/core": "^7.8.7",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-decorators": "^7.0.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
+    "@babel/plugin-proposal-function-sent": "^7.0.0",
+    "@babel/plugin-proposal-json-strings": "^7.0.0",
+    "@babel/plugin-proposal-numeric-separator": "^7.0.0",
+    "@babel/plugin-proposal-throw-expressions": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-syntax-import-meta": "^7.0.0",
     "@babel/preset-env": "^7.8.7",
     "@babel/preset-flow": "^7.8.3",
     "@babel/preset-react": "^7.8.3",
@@ -55,6 +64,7 @@
     "babel-loader": "^8.0.6",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.4.2",
+    "es-expand": "^1.0.4",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-formatter-friendly": "^7.0.0",
@@ -84,5 +94,12 @@
     "webpack-cli": "^3.3.11",
     "webpack-merge": "^4.2.2",
     "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "bom-expand": "^1.0.2",
+    "bro-tools": "^1.0.1",
+    "com-tools": "^1.0.4",
+    "dom-expand": "^1.0.1",
+    "es-expand": "^1.0.4"
   }
 }

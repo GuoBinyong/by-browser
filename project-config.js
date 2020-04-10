@@ -53,7 +53,7 @@ var projectConfig = {
     - 详细信息： <https://webpack.docschina.org/configuration/entry-context/#entry>
     - 注意： 如果修改了 entry 的值，你可能需要考虑下是否要同步更改下 package.json 中的 module 属性；
    */
-  entry: "./src/bytools.js",
+  entry: "./src/index",
 
   /*
   webpack 的 target，用来告知 webpack   bundles 的运行环境。因为 服务器 和 浏览器 代码都可以用 JavaScript 编写，所以 webpack 提供了多种部署 target(目标)
@@ -77,7 +77,11 @@ var projectConfig = {
     - 详细信息： <https://webpack.docschina.org/configuration/output/#output-library>
     - 注意： 如果更改了 library 的值，你可能需要考虑下是否要同步更改下 package.json 中的 name 属性；
   */
-  // library: "",
+  library: {
+    root: 'by',
+    amd: 'by-browser',
+    commonjs: 'by-browser'
+  },
 
   /*
   配置对外暴露 库 的方式，即：库将会以哪种方式被使用；webpack 的 output.libraryTarget；
@@ -118,7 +122,39 @@ var projectConfig = {
     - **默认值：** `webpackNodeExternals()` ； 即排除所有 `node_modules` 中的模块； `webpackNodeExternals` 是 webpack-node-externals 包提供的功能，该包的信息详见 <https://github.com/liady/webpack-node-externals> ；
     - 详细信息： <https://webpack.docschina.org/configuration/externals/#externals>
   */
-  // externals: {},
+  externals: {
+    "es-expand": {
+      root: "esExpand",
+      commonjs2: "es-expand",
+      commonjs: "es-expand",
+      amd: "es-expand"
+    },
+    "dom-expand": {
+      root: "domExpand",
+      commonjs2: "dom-expand",
+      commonjs: "dom-expand",
+      amd: "dom-expand"
+    },
+    "bom-expand": {
+      root: "bomExpand",
+      commonjs2: "bom-expand",
+      commonjs: "bom-expand",
+      amd: "bom-expand"
+    },
+    "com-tools": {
+      root: "comTools",
+      commonjs2: "com-tools",
+      commonjs: "com-tools",
+      amd: "com-tools"
+    },
+    "bro-tools": {
+      root: "broTools",
+      commonjs2: "bro-tools",
+      commonjs: "bro-tools",
+      amd: "bro-tools"
+    }
+
+  },
 
   /*
   html模板文件；html-webpack-plugin
@@ -164,7 +200,7 @@ var projectConfig = {
       - 默认值： "ES3"
       - 详细信息： <https://www.tslang.cn/docs/handbook/compiler-options.html>
     */
-    target: "ESNext",
+    // target: "ESNext",
 
     /*
     指定生成哪个模块系统代码；用作 tsconfig.json 的 module 选项；
@@ -172,7 +208,7 @@ var projectConfig = {
       - 默认值： target === "ES6" ? "ES6" : "commonjs"
       - 详细信息： <https://www.tslang.cn/docs/handbook/compiler-options.html>
      */
-     module:"ES6",
+     // module:"CommonJS",
 
     /*
     指定是否生成相应的 .d.ts 文件。用作 tsconfig.json 的 declaration 选项
@@ -180,7 +216,7 @@ var projectConfig = {
       - 默认值： false
       - 详细信息： <https://www.tslang.cn/docs/handbook/compiler-options.html>
     */
-    declaration: true,
+    // declaration: true,
 
 
 
