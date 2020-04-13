@@ -1,8 +1,8 @@
 {
   "name": "by-browser",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "by-browser 包含了 es-expand、dom-expand、bom-expand、com-tools、bro-tools 等，提供了浏览器中原生类型功能的扩展 和 一些实用的工具函数",
-  "main": "dist/byBrowser",
+  "main": "dist/by-browser.umd.js",
   "module": "src/index",
   "types": "src/index.d.ts",
   "sideEffects": true,
@@ -64,7 +64,7 @@
     "babel-loader": "^8.0.6",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.4.2",
-    "es-expand": "^1.0.4",
+    "es-expand": "^1.0.5",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-formatter-friendly": "^7.0.0",
@@ -96,10 +96,10 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "bom-expand": "^1.0.2",
-    "bro-tools": "^1.0.1",
-    "com-tools": "^1.0.4",
-    "dom-expand": "^1.0.1",
-    "es-expand": "^1.0.4"
+    "bom-expand": "^1.0.3",
+    "bro-tools": "^1.0.2",
+    "com-tools": "^1.0.5",
+    "dom-expand": "^1.0.2",
+    "es-expand": "^1.0.5"
   }
 }
