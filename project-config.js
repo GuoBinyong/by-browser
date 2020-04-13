@@ -18,6 +18,16 @@ function resolve(dir) {
 
 var projectConfig = {
 
+  /*
+  指定 在将 多构建目标 `multipleTargets` 中的选项 与 默认的项目配置 projectConfig 进行合并时 采用覆盖方式进行合并的 key；
+    - **类型：** undefined | null | Array<string>
+    - **默认值：** `["externals"]`
+    - **说明：**
+       * 此选项只用于 多构建目标 `multipleTargets` 与 默认的项目配置 projectConfig 的合并；
+       * 些选择只能配置在 projectConfig 的顶层（即：projectConfig.overrideKeys），多构建目标 `multipleTargets` 中的 overrideKeys 选项会被忽略；
+  */
+  // overrideKeys:["externals"],
+
 
   /*
   配置多个构建目标；当进行构建时，会对 multipleTargets 数组中的每个项目配置分别构建并生成对应的包；
@@ -33,16 +43,55 @@ var projectConfig = {
                 * 方案1（这是默认的设置）：将 所有构建目标公共的 `projectConfig.bundleAnalyzerOptions.analyzerPort` 设置为 auto ；
                 * 方案2：分别给每一个 构建目标的 `bundleAnalyzerOptions.analyzerPort` 设置一个不同的值；
   */
-/*   multipleTargets: [
+  multipleTargets: [
     //使用默认的配置
-    null,
+    null,  // 目前默认配置是：web环境下的umd方案
 
-    // node
+     // 通过 script 标签直接引用
+     {
+      target: "web",  //设置被构建的包的运行环境
+      filename: '[name].script.js',  //输出的包名
+      // library: "",  //库名
+      libraryTarget: "window",  //将包挂载到window中与库名同名的属性上
+      externals: {},  //不排任何依赖，即将所有依赖都打包进库
+    },
+
+    // 通过 commonjs2 规范引用
     {
-      target: "node",
-      filename: '[name].node.js'
-    }
-  ], */
+      // target: "web",   //设置被构建的包的运行环境
+      // filename: '[name].commonjs2.js',  //输出的包名
+      // library: "",  //库名
+      libraryTarget: "commonjs2",  //将库构建成遵循 commonjs2 规范的包
+      externals: undefined,  //排任 node_module 中的所有依赖
+    },
+    // 通过 commonjs 规范引用
+    {
+      // target: "web",   //设置被构建的包的运行环境
+      // filename: '[name].commonjs2.js',  //输出的包名
+      // library: "",  //库名
+      libraryTarget: "commonjs",  //将库构建成遵循 commonjs2 规范的包
+      externals: undefined,  //排除 node_module 中的所有依赖
+    },
+
+    // 通过 amd 规范引用
+    {
+      // target: "web",   //设置被构建的包的运行环境
+      // filename: '[name].amd.js',  //输出的包名
+      library: "by-browser",  //库名
+      libraryTarget: "amd",  //将库构建成遵循 commonjs2 规范的包
+      externals: undefined,  //排除 node_module 中的所有依赖
+    },
+
+    // node 环境中的 umd 模块化方案
+    /* {
+      target: "node",   //设置被构建的包的运行环境
+      filename: '[name].umd.node.js',  //输出的包名
+      // library: "",  //库名
+      libraryTarget: "umd",  //将库构建成遵循 commonjs2 规范的包
+      externals: undefined,  //排除 node_module 中的所有依赖
+    }, */
+
+  ],
 
 
 
@@ -65,22 +114,33 @@ var projectConfig = {
   /*
   webpack 的 filename；此选项决定了每个输出 bundle 的名称。这些 bundle 将写入到 output.path 选项指定的目录下
     - 类型： string | function
-    - 默认值："[name].js"
+    - **默认值：**
+       + 当未显式指定 libraryTarget 时，`filename` 的默认值为 `<package.json/name>.js`；
+       + 当显式指定 libraryTarget 时，`filename` 的默认值为 `<package.json/name>.<project-config.js/libraryTarget>.js`；
+       + **注意：**
+          * 其中 `<package.json/name>` 的值为 package.json 文件中 name 的值，`<project-config.js/libraryTarget>` 为 project-config.js 文件中 libraryTarget 的值；
+          * 你可以在 filename 中使用 webpack 提供的模板字符串，如 `[name]` ；
+          * 其中 `<package.json/name>` 和 `<project-config.js/libraryTarget>` 并不是 webpack 给 filename 字段提供的有效的模板字符串；
     - 详细信息： <https://webpack.docschina.org/configuration/output/#output-filename>
   */
   // filename:'[name].js',
 
   /*
   库的名字；webpack 的 output.library；
-    - 类型： string 或 object（从 webpack 3.1.0 开始；用于 libraryTarget: 'umd'）
+    - 类型： string | object | null | undefined （从 webpack 3.1.0 开始；用于 libraryTarget: 'umd'）；
+        * 当值为 undefined 时，会使用默认值；
+        * 当值为 null 时，会取消配置 webpack 的 output.library
     - 默认值： tools.stringToCamelFormat(package.name)  即默认值是 package.json 文件中的 name 字段的值的驼峰式名字；函数 `tools.stringToCamelFormat(str)` 的作用是把 字符串 str 从 中划线 或 下划线 分隔的方式 转成 驼峰式
-    - 详细信息： <https://webpack.docschina.org/configuration/output/#output-library>
-    - 注意： 如果更改了 library 的值，你可能需要考虑下是否要同步更改下 package.json 中的 name 属性；
+    - **说明：** 某些模块化方案（由 `libraryTarget` 选项指定）（比如：`var`、`assign`、`this`、`window`、`self`、`global` 等等）会在引入库时会在环境中注入特定名字的环境变量，以便引入者能够通过该环境变量来访问库对外暴露的接口，该环境变量的名字就是由该选项 `library` 指定；
+    - **详细信息：** <https://webpack.docschina.org/configuration/output/#output-library>
+    - **注意**
+       * 如果更改了 library 的值，你可能需要考虑下是否要同步更改下 package.json 中的 name 属性；
+       * 如果库不对外导出（暴露）任何东西里，推荐将该 library 设置为 null
   */
   library: {
-    root: 'by',
-    amd: 'by-browser',
-    commonjs: 'by-browser'
+    root: "by",
+    commonjs: "by-browser",
+    amd: "by-browser"
   },
 
   /*
@@ -97,7 +157,7 @@ var projectConfig = {
     - 备注： 如果设置成空字符串 "" ，则会导出包含所有导出的对象；
     - 详细信息： <https://webpack.docschina.org/configuration/output/#output-libraryexport>
   */
-  libraryExport: "",
+  libraryExport: "default",
 
   /*
   webpack 的 resolve.alias，创建 import 或 require 的别名，来使模块引入变得更简单
@@ -114,7 +174,7 @@ var projectConfig = {
     - 类型： string[]
     - 详细信息： <https://webpack.docschina.org/configuration/resolve/#resolve-extensions>
   */
-  extensions: ['.tsx', '.ts', '.jsx', '.js', '.json'],
+  extensions: ['.tsx', '.ts', '.jsx','.js', '.json'],
 
   /*
   webpack 的 externals； 排除依赖的模块；防止将某些 import 的包(package)打包到 bundle 中；
@@ -122,39 +182,70 @@ var projectConfig = {
     - **默认值：** `webpackNodeExternals()` ； 即排除所有 `node_modules` 中的模块； `webpackNodeExternals` 是 webpack-node-externals 包提供的功能，该包的信息详见 <https://github.com/liady/webpack-node-externals> ；
     - 详细信息： <https://webpack.docschina.org/configuration/externals/#externals>
   */
-  externals: {
-    "es-expand": {
-      root: "esExpand",
-      commonjs2: "es-expand",
-      commonjs: "es-expand",
-      amd: "es-expand"
-    },
-    "dom-expand": {
-      root: "domExpand",
-      commonjs2: "dom-expand",
-      commonjs: "dom-expand",
-      amd: "dom-expand"
-    },
-    "bom-expand": {
-      root: "bomExpand",
-      commonjs2: "bom-expand",
-      commonjs: "bom-expand",
-      amd: "bom-expand"
-    },
-    "com-tools": {
-      root: "comTools",
-      commonjs2: "com-tools",
-      commonjs: "com-tools",
-      amd: "com-tools"
-    },
-    "bro-tools": {
-      root: "broTools",
-      commonjs2: "bro-tools",
-      commonjs: "bro-tools",
-      amd: "bro-tools"
-    }
-
+ externals: {
+  "es-expand": {
+    root: "esExpand",
+    commonjs2: "es-expand",
+    commonjs: "es-expand",
+    amd: "es-expand"
   },
+  "dom-expand": {
+    root: "domExpand",
+    commonjs2: "dom-expand",
+    commonjs: "dom-expand",
+    amd: "dom-expand"
+  },
+  "bom-expand": {
+    root: "bomExpand",
+    commonjs2: "bom-expand",
+    commonjs: "bom-expand",
+    amd: "bom-expand"
+  },
+  "com-tools": {
+    root: "comTools",
+    commonjs2: "com-tools",
+    commonjs: "com-tools",
+    amd: "com-tools"
+  },
+  "bro-tools": {
+    root: "broTools",
+    commonjs2: "bro-tools",
+    commonjs: "bro-tools",
+    amd: "bro-tools"
+  }
+
+},
+
+
+
+
+
+
+
+    /*
+     是否使用 Eslint Loader；
+      - 类型： boolean
+      - 默认值： false
+      - 详细信息： <https://github.com/webpack-contrib/eslint-loader>
+
+     If true, your code will be linted during bundling and
+     linting errors and warnings will be shown in the console.
+    */
+   useEslint: true,
+
+   /*
+   是否在浏览器中显示 Eslint 的错误和警告；
+     - 类型： boolean
+     - 默认值： false
+     - 详细信息： <https://github.com/webpack-contrib/eslint-loader>
+
+    If true, eslint errors and warnings will also be shown in the error overlay
+    in the browser.
+    */
+   showEslintErrorsInOverlay: true,
+
+
+
 
   /*
   html模板文件；html-webpack-plugin
@@ -200,7 +291,7 @@ var projectConfig = {
       - 默认值： "ES3"
       - 详细信息： <https://www.tslang.cn/docs/handbook/compiler-options.html>
     */
-    // target: "ESNext",
+    target: "ESNext",
 
     /*
     指定生成哪个模块系统代码；用作 tsconfig.json 的 module 选项；
@@ -208,7 +299,7 @@ var projectConfig = {
       - 默认值： target === "ES6" ? "ES6" : "commonjs"
       - 详细信息： <https://www.tslang.cn/docs/handbook/compiler-options.html>
      */
-     // module:"CommonJS",
+     // module:"ES6",
 
     /*
     指定是否生成相应的 .d.ts 文件。用作 tsconfig.json 的 declaration 选项
@@ -216,7 +307,7 @@ var projectConfig = {
       - 默认值： false
       - 详细信息： <https://www.tslang.cn/docs/handbook/compiler-options.html>
     */
-    // declaration: true,
+    declaration: true,
 
 
 
@@ -227,7 +318,8 @@ var projectConfig = {
     - 类型： "ts-loader" | "babel-loader"
     - 默认值： "ts-loader"
     - 注意： 目前发现：
-      * "ts-loader" 会忽略TypeScript中默认的导出项 `export default`(TypeScript 3 之后 默认禁用了 `export default`)，这时配置项 ` libraryExport: "default" ` 可能会导到导出的值是 undefined
+      * "ts-loader" 会忽略TypeScript中默认的导出项 `export default`(TypeScript 3 之后 默认禁用了 `export default`)，这时配置项 ` libraryExport: "default" ` 可能会导到导出的值是 undefined；
+      * tsconfig 的相关编译选项： allowSyntheticDefaultImports：允许从没有设置默认导出的模块中默认导入。这并不影响代码的输出，仅为了类型检查。
       * "babel-loader" 暂未支持生成 声明文件 .d.ts，并且会忽略 项目中关于 TypeScript 的自定配置，如：tsconfig.json、tsconfig.dev.js、tsconfig.prod.js 中的配置
     */
     loader: "ts-loader",
@@ -281,28 +373,6 @@ var projectConfig = {
     */
     outputPath: resolve("dev"),
 
-
-    /*
-     是否使用 Eslint Loader；
-      - 类型： boolean
-      - 默认值： false
-      - 详细信息： <https://github.com/webpack-contrib/eslint-loader>
-
-     If true, your code will be linted during bundling and
-     linting errors and warnings will be shown in the console.
-    */
-    useEslint: false,
-
-    /*
-    是否在浏览器中显示 Eslint 的错误和警告；
-      - 类型： boolean
-      - 默认值： false
-      - 详细信息： <https://github.com/webpack-contrib/eslint-loader>
-
-     If true, eslint errors and warnings will also be shown in the error overlay
-     in the browser.
-     */
-    showEslintErrorsInOverlay: false,
 
     /*
     source map 的开关；用于控制是否生成 source map；
