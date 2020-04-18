@@ -1,6 +1,6 @@
 {
   "name": "by-browser",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "by-browser 包含了 es-expand、dom-expand、bom-expand、com-tools、bro-tools 等，提供了浏览器中原生类型功能的扩展 和 一些实用的工具函数",
   "main": "dist/by-browser.umd.js",
   "module": "src/index",
@@ -97,8 +97,8 @@
   },
   "dependencies": {
     "bom-expand": "^1.0.3",
-    "bro-tools": "^1.0.2",
-    "com-tools": "^1.0.5",
+    "bro-tools": "^1.0.4",
+    "com-tools": "^1.0.7",
     "dom-expand": "^1.0.2",
     "es-expand": "^1.0.5"
   }
