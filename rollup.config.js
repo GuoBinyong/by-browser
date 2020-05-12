@@ -28,7 +28,7 @@ export default [
 		input: 'src/index.ts',
 		output: {
 			name: "by",  //驼峰格式的 pkg.name
-			file: pkg.browser || `${pkg.name}.umd.js`,
+			file: pkg.browser || `dist/${pkg.name}.umd.js`,
 			format: 'umd'
 		},
 		plugins: [
