@@ -1,11 +1,11 @@
 {
   "name": "by-browser",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "by-browser 包含了 es-expand、dom-expand、bom-expand、com-tools、bro-tools 等，提供了浏览器中原生类型功能的扩展 和 一些实用的工具函数",
   "main": "dist/by-browser.cjs.js",
   "module": "dist/by-browser.esm.js",
   "types": "dist/index.d.ts",
-  "sideEffects": true,
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/GuoBinyong/by-browser"
@@ -44,17 +44,20 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.1.0",
     "@rollup/plugin-node-resolve": "^7.1.3",
+    "@typescript-eslint/eslint-plugin": "^3.0.0",
+    "@typescript-eslint/parser": "^3.0.0",
+    "eslint": "^7.0.0",
     "rollup": "^2.7.2",
     "rollup-plugin-typescript2": "^0.27.0",
     "ts-node": "^8.9.1",
-    "tslib": "^1.11.1",
+    "tslib": "^2.0.0",
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "bom-expand": "^1.0.10",
-    "bro-tools": "^1.0.9",
-    "com-tools": "^1.0.13",
-    "dom-expand": "^1.0.5",
-    "es-expand": "^1.0.13"
+    "bom-expand": "^1.0.11",
+    "bro-tools": "^1.0.10",
+    "com-tools": "^1.0.15",
+    "dom-expand": "^1.0.6",
+    "es-expand": "^1.0.16"
   }
 }

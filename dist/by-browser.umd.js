@@ -1,27 +1,17 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = global || self, factory(global.by = {}));
+  (global = global || self, factory(global.byBrowser = {}));
 }(this, (function (exports) { 'use strict';
 
-  function _typeof(obj) {
-    "@babel/helpers - typeof";
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
 
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function (obj) {
-        return typeof obj;
-      };
-    } else {
-      _typeof = function (obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-      };
+    for (var i = 0, arr2 = new Array(len); i < len; i++) {
+      arr2[i] = arr[i];
     }
 
-    return _typeof(obj);
-  }
-
-  function _toConsumableArray(arr) {
-    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+    return arr2;
   }
 
   function _arrayWithoutHoles(arr) {
@@ -37,75 +27,16 @@
     if (typeof o === "string") return _arrayLikeToArray(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Map" || n === "Set") return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-  }
-
-  function _arrayLikeToArray(arr, len) {
-    if (len == null || len > arr.length) len = arr.length;
-
-    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-
-    return arr2;
   }
 
   function _nonIterableSpread() {
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
-  function _createForOfIteratorHelper(o) {
-    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
-      if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) {
-        var i = 0;
-
-        var F = function () {};
-
-        return {
-          s: F,
-          n: function () {
-            if (i >= o.length) return {
-              done: true
-            };
-            return {
-              done: false,
-              value: o[i++]
-            };
-          },
-          e: function (e) {
-            throw e;
-          },
-          f: F
-        };
-      }
-
-      throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-    }
-
-    var it,
-        normalCompletion = true,
-        didErr = false,
-        err;
-    return {
-      s: function () {
-        it = o[Symbol.iterator]();
-      },
-      n: function () {
-        var step = it.next();
-        normalCompletion = step.done;
-        return step;
-      },
-      e: function (e) {
-        didErr = true;
-        err = e;
-      },
-      f: function () {
-        try {
-          if (!normalCompletion && it.return != null) it.return();
-        } finally {
-          if (didErr) throw err;
-        }
-      }
-    };
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
   }
 
   /*
@@ -429,7 +360,7 @@
      * @param end ? : number   可选，默认值：start ； 被删除的元素的结束索引；
      * @returns Array   被删除的元素的数组
      */
-    delete: {
+    "delete": {
       configurable: true,
       writable: true,
       enumerable: false,
@@ -847,6 +778,22 @@
     var length = target && target.length;
     return Number.isInteger(target.length) && length >= 0;
   };
+
+  function _typeof(obj) {
+    "@babel/helpers - typeof";
+
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof = function _typeof(obj) {
+        return typeof obj;
+      };
+    } else {
+      _typeof = function _typeof(obj) {
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+      };
+    }
+
+    return _typeof(obj);
+  }
 
   //对 JSON 扩展的属性和方法都写在 extendJSON 里面
   var extendJSON = {
@@ -1499,6 +1446,50 @@
 
   };*/
 
+  function _arrayWithHoles(arr) {
+    if (Array.isArray(arr)) return arr;
+  }
+
+  function _iterableToArrayLimit(arr, i) {
+    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"] != null) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  function _slicedToArray(arr, i) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+  }
+
+  function _createForOfIteratorHelper(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (o = _unsupportedIterableToArray$1(o))) { var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+  function _unsupportedIterableToArray$1(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray$1(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray$1(o, minLen); }
+
+  function _arrayLikeToArray$1(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
   /*
    使用属性描述来定义属性的原因：
    - 为了不让 for...in 等类似的操作遍历这些定义在原型上的方法或属性，需要将属性设置为不可枚举的；
@@ -2169,7 +2160,7 @@
       }
     } else {
       if (nullNotEqualUndefined) {
-        var equalTest = function equalTest(a, b) {
+        equalTest = function equalTest(a, b) {
           return a == null ? a === b : a == b;
         };
       } else {
@@ -2204,9 +2195,30 @@
       }
 
       if (a instanceof Map) {
-        if (b instanceof Map && a.size === b.size) ; else {
-          return false;
+        if (b instanceof Map && a.size === b.size) {
+          var _iterator2 = _createForOfIteratorHelper(a),
+              _step2;
+
+          try {
+            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+              var _step2$value = _slicedToArray(_step2.value, 2),
+                  key = _step2$value[0],
+                  aVal = _step2$value[1];
+
+              if (!(b.has(key) && Object.isDepthEqual(aVal, b.get(key), nullNotEqualUndefined, strict))) {
+                return false;
+              }
+            }
+          } catch (err) {
+            _iterator2.e(err);
+          } finally {
+            _iterator2.f();
+          }
+
+          return true;
         }
+
+        return false;
       }
 
       var aIsArr = Array.isArray(a);
@@ -2215,18 +2227,18 @@
       if (!aIsArr && Object.isIterable(a)) {
         var aArr = [];
 
-        var _iterator2 = _createForOfIteratorHelper(a),
-            _step2;
+        var _iterator3 = _createForOfIteratorHelper(a),
+            _step3;
 
         try {
-          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-            var value = _step2.value;
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var value = _step3.value;
             aArr.push(value);
           }
         } catch (err) {
-          _iterator2.e(err);
+          _iterator3.e(err);
         } finally {
-          _iterator2.f();
+          _iterator3.f();
         }
 
         a = aArr;
@@ -2236,18 +2248,18 @@
       if (!bIsArr && Object.isIterable(b)) {
         var bArr = [];
 
-        var _iterator3 = _createForOfIteratorHelper(b),
-            _step3;
+        var _iterator4 = _createForOfIteratorHelper(b),
+            _step4;
 
         try {
-          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-            var _value = _step3.value;
+          for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+            var _value = _step4.value;
             bArr.push(_value);
           }
         } catch (err) {
-          _iterator3.e(err);
+          _iterator4.e(err);
         } finally {
-          _iterator3.f();
+          _iterator4.f();
         }
 
         b = bArr;
@@ -2258,7 +2270,7 @@
         return false;
       }
 
-      if (isArr) {
+      if (aIsArr) {
         if (a.length != b.length) {
           return false;
         }
@@ -2272,7 +2284,6 @@
       var aEntrs = Object.entries(a);
       var bEntrs = Object.entries(b);
       aEntrs = aEntrs.filter(function (entr) {
-        !equalTest(entr[1], undefined);
         return !equalTest(entr[1], undefined);
       });
       bEntrs = bEntrs.filter(function (entr) {
@@ -2296,7 +2307,6 @@
 
   //元素位置距离：开始
 
-
   /**
    * 计算元素相对指定的祖先节点 parentNode 的偏移量
    * @param parentNode : Element  祖先节点
@@ -2305,7 +2315,6 @@
   Element.prototype.scrollDistanceFromParent = function (parentNode) {
     var top = this.scrollTop;
     var left = this.scrollLeft;
-
     var nextNode = this.parentNode;
 
     while (!parentNode.isSameNode(nextNode)) {
@@ -2314,22 +2323,22 @@
       nextNode = nextNode.parentNode;
     }
 
-    return {x: left,y: top, left: left, top: top };
+    return {
+      x: left,
+      y: top,
+      left: left,
+      top: top
+    };
   };
-
-
-
-
-
-
   /**
    * 计算元素相对文档的偏移量
    * @return {x:number,y:number,left:number,top:number}   x、leftL: 水平方向的偏移量；y、top : 垂直方向的偏移量；
    */
+
+
   Element.prototype.offsetFromDocument = function () {
     var top = this.offsetTop;
     var left = this.offsetLeft;
-
     var nextNode = this.offsetParent;
 
     while (nextNode) {
@@ -2338,198 +2347,165 @@
       nextNode = nextNode.offsetParent;
     }
 
-    return {x: left,y: top, left: left, top: top };
+    return {
+      x: left,
+      y: top,
+      left: left,
+      top: top
+    };
   };
-
-
-
-
-
-
   /**
    * 计算指定元素相对于当前元素之间的可视的距离坐标
    * @param toDom : Element  指定元素
    * @return {x:number,y:number,left:number,top:number}  x、left: 水平方向的的距离；y、top : 垂直方向的距离；
    */
-  Element.prototype.distanceToDom = function (toDom) {
 
+
+  Element.prototype.distanceToDom = function (toDom) {
     var fromRect = this.getBoundingClientRect();
     var toRect = toDom.getBoundingClientRect();
-
     var x = toRect.left - fromRect.left;
     var y = toRect.top - fromRect.top;
-
-    return {x: x,y: y,left: x,top: y};
-  };
-
-
-  //元素位置距离：结束
-
-
-
-
-
-
-
-
-
+    return {
+      x: x,
+      y: y,
+      left: x,
+      top: y
+    };
+  }; //元素位置距离：结束
   //元素行字数：开始
 
+
   var propertyDescriptors$3 = {
-
-
     /**
      * isVertical : boolean  表示元素的内容是否是垂直方向排列
      */
     isVertical: {
-      configurable:true,
-      enumerable:false,
-      get:function(){
+      configurable: true,
+      enumerable: false,
+      get: function get() {
         var compStyle = globalThis.getComputedStyle(this);
-        var writingMode =  compStyle.writingMode;
-
+        var writingMode = compStyle.writingMode;
         var isVer = false;
+
         switch (writingMode) {
           case "vertical-rl":
           case "vertical-lr":
-          case "tb-rl":{
-            isVer = true;
-            break;
-          }
+          case "tb-rl":
+            {
+              isVer = true;
+              break;
+            }
         }
 
         return isVer;
       }
     },
 
-
     /**
      * computedLineHeight : number  返回元素的计算后的行高
      */
-    computedLineHeight:{
-      configurable:true,
-      enumerable:false,
-      get:function(){
+    computedLineHeight: {
+      configurable: true,
+      enumerable: false,
+      get: function get() {
         var compStyle = globalThis.getComputedStyle(this);
-        var lineHeight =  parseFloat(compStyle.lineHeight);
+        var lineHeight = parseFloat(compStyle.lineHeight);
 
         if (isNaN(lineHeight)) {
           var fontSize = parseFloat(compStyle.fontSize);
-          lineHeight = fontSize * 1.2 ;
+          lineHeight = fontSize * 1.2;
         }
 
         return lineHeight;
       }
-
     },
-
 
     /**
      * contentHeight : number   元素内容区域的高度
      */
     contentHeight: {
-      configurable:true,
+      configurable: true,
       enumerable: false,
-      get: function(){
+      get: function get() {
         var compStyle = globalThis.getComputedStyle(this);
         var clientHeight = this.clientHeight;
-        var paddingTop =  parseFloat(compStyle.paddingTop);
-        var paddingBottom =  parseFloat(compStyle.paddingBottom);
-
+        var paddingTop = parseFloat(compStyle.paddingTop);
+        var paddingBottom = parseFloat(compStyle.paddingBottom);
         return clientHeight - paddingTop - paddingBottom;
       }
-
     },
 
     /**
      * contentWidth : number   元素内容区域的宽度
      */
     contentWidth: {
-      configurable:true,
+      configurable: true,
       enumerable: false,
-      get: function(){
+      get: function get() {
         var compStyle = globalThis.getComputedStyle(this);
         var clientWidth = this.clientWidth;
-        var paddingLeft =  parseFloat(compStyle.paddingLeft);
-        var paddingRight =  parseFloat(compStyle.paddingRight);
-
+        var paddingLeft = parseFloat(compStyle.paddingLeft);
+        var paddingRight = parseFloat(compStyle.paddingRight);
         return clientWidth - paddingLeft - paddingRight;
       }
-
     },
-
-
 
     /**
      * scrollContentHeight : number   元素的滑动内容区域的高度
      */
     scrollContentHeight: {
-      configurable:true,
+      configurable: true,
       enumerable: false,
-      get: function(){
+      get: function get() {
         var compStyle = globalThis.getComputedStyle(this);
         var scrollHeight = this.scrollHeight;
-        var paddingTop =  parseFloat(compStyle.paddingTop);
-        var paddingBottom =  parseFloat(compStyle.paddingBottom);
-
+        var paddingTop = parseFloat(compStyle.paddingTop);
+        var paddingBottom = parseFloat(compStyle.paddingBottom);
         return scrollHeight - paddingTop - paddingBottom;
       }
-
     },
-
-
 
     /**
      * scrollContentWidth : number   元素的滑动内容区域的宽度
      */
     scrollContentWidth: {
-      configurable:true,
+      configurable: true,
       enumerable: false,
-      get: function(){
+      get: function get() {
         var compStyle = globalThis.getComputedStyle(this);
         var scrollWidth = this.scrollWidth;
-        var paddingTop =  parseFloat(compStyle.paddingTop);
-        var paddingBottom =  parseFloat(compStyle.paddingBottom);
-
+        var paddingTop = parseFloat(compStyle.paddingTop);
+        var paddingBottom = parseFloat(compStyle.paddingBottom);
         return scrollWidth - paddingTop - paddingBottom;
       }
-
     },
-
-
-
 
     /**
      * numberOfLinesOnClient : number  返回能在元素的 client 中能显示文字的最大行数
      */
     numberOfLinesOnClient: {
-      configurable:true,
+      configurable: true,
       enumerable: false,
-      get: function () {
-        var length = this.isVertical ? this.contentWidth : this.contentHeight ;
-        return length / (this.computedLineHeight);
+      get: function get() {
+        var length = this.isVertical ? this.contentWidth : this.contentHeight;
+        return length / this.computedLineHeight;
       }
-
     },
-
 
     /**
      * numberOfCharsPerLineOnClient : number  返回能在元素的 client 中每行能显示文字的最大字数
      */
     numberOfCharsPerLineOnClient: {
-      configurable:true,
+      configurable: true,
       enumerable: false,
-      get: function () {
+      get: function get() {
         var compStyle = globalThis.getComputedStyle(this);
         var fontSize = parseFloat(compStyle.fontSize);
-
-        var length = this.isVertical ? this.contentHeight : this.contentWidth ;
+        var length = this.isVertical ? this.contentHeight : this.contentWidth;
         return length / fontSize;
       }
-
     },
-
-
 
     /**
      * numberOfCharsOnClient : number  返回能在元素的 client 中能显示文字的最大字数
@@ -2537,51 +2513,40 @@
      * 该值是 对 numberOfLinesOnClient 和 numberOfCharsPerLineOnClient 四舍五入后的乘积
      */
     numberOfCharsOnClient: {
-      configurable:true,
+      configurable: true,
       enumerable: false,
-      get: function () {
+      get: function get() {
         var roundLineNum = Math.round(this.numberOfLinesOnClient);
         var roundCharNum = Math.round(this.numberOfCharsPerLineOnClient);
-
         return roundLineNum * roundCharNum;
       }
-
     },
-
-
-
 
     /**
      * numberOfLinesOnScroll : number  返回能在元素的 滑动区域 中能显示文字的最大行数
      */
     numberOfLinesOnScroll: {
-      configurable:true,
+      configurable: true,
       enumerable: false,
-      get: function () {
-        var length = this.isVertical ? this.scrollContentWidth : this.scrollContentHeight ;
-        return length / (this.computedLineHeight);
+      get: function get() {
+        var length = this.isVertical ? this.scrollContentWidth : this.scrollContentHeight;
+        return length / this.computedLineHeight;
       }
-
     },
-
 
     /**
      * numberOfCharsPerLineOnScroll : number  返回能在元素的  滑动区域 中每行能显示文字的最大字数
      */
     numberOfCharsPerLineOnScroll: {
-      configurable:true,
+      configurable: true,
       enumerable: false,
-      get: function () {
+      get: function get() {
         var compStyle = globalThis.getComputedStyle(this);
         var fontSize = parseFloat(compStyle.fontSize);
-        var length = this.isVertical ? this.scrollContentHeight : this.scrollContentWidth ;
+        var length = this.isVertical ? this.scrollContentHeight : this.scrollContentWidth;
         return length / fontSize;
       }
-
     },
-
-
-
 
     /**
      * numberOfCharsOnClient : number  返回能在元素的 滑动区域 中能显示文字的最大字数
@@ -2589,196 +2554,141 @@
      * 该值是 对 numberOfLinesOnScroll 和 numberOfCharsPerLineOnScroll 四舍五入后的乘积
      */
     numberOfCharsOnScroll: {
-      configurable:true,
+      configurable: true,
       enumerable: false,
-      get: function () {
+      get: function get() {
         var roundLineNum = Math.round(this.numberOfLinesOnScroll);
         var roundCharNum = Math.round(this.numberOfCharsPerLineOnScroll);
-
         return roundLineNum * roundCharNum;
       }
-
-    },
-
+    }
   };
-
-
-
-  Object.defineProperties(Element.prototype,propertyDescriptors$3);
-
-
-
-
-
-
-
+  Object.defineProperties(Element.prototype, propertyDescriptors$3);
   /**
    * calcClientLengthOfLines(lineNumber)
    * 计算刚好容纳指定的 行数 时 元素的尺寸
    * @param lineNumber : number  行数
    */
-  Element.prototype.calcClientLengthOfLines = function (lineNumber) {
 
-    var isVisible = this.isVisible ;
+  Element.prototype.calcClientLengthOfLines = function (lineNumber) {
+    var isVisible = this.isVisible;
     var length = 0;
 
     if (lineNumber == undefined) {
-      return {length:length, visible:isVisible} ;
+      return {
+        length: length,
+        visible: isVisible
+      };
     }
 
-
-
     length = this.computedLineHeight * lineNumber;
-
-
     var compStyle = globalThis.getComputedStyle(this);
     var boxSizing = compStyle.boxSizing;
-    var isBorderBox = boxSizing == "border-box" ;
-
+    var isBorderBox = boxSizing == "border-box";
 
     if (isBorderBox) {
-
       if (isVisible) {
         var paddingLeft = parseFloat(compStyle.paddingLeft);
         var paddingRight = parseFloat(compStyle.paddingRight);
-        length = length + paddingLeft + paddingRight ;
-      }else {
+        length = length + paddingLeft + paddingRight;
+      } else {
         var paddingTop = parseFloat(compStyle.paddingTop);
         var paddingBottom = parseFloat(compStyle.paddingBottom);
-        length = length + paddingTop + paddingBottom ;
+        length = length + paddingTop + paddingBottom;
       }
-
     }
 
-    return {length:length, visible:isVisible} ;
-
+    return {
+      length: length,
+      visible: isVisible
+    };
   };
-
-
-
-
-
-
-
   /**
    * setNumberOfLines(lineNumber)
    * 给元素设置相应的尺寸以使能刚好容纳指定的 行数
    * @param lineNumber : number | undefined | null    行数 ; 当值为 undefined | null 时，清除之前关于行数的设置
    */
+
+
   Element.prototype.setNumberOfLines = function (lineNumber) {
-
     var lengthInfo = this.calcClientLengthOfLines(lineNumber);
-    var isVisible = lengthInfo.visible ;
-    var lineLength = lengthInfo.length ;
+    var isVisible = lengthInfo.visible;
+    var lineLength = lengthInfo.length;
 
-    if (lineNumber == undefined) { //如果没传任何值；则清除相关的内联样式
-
+    if (lineNumber == undefined) {
+      //如果没传任何值；则清除相关的内联样式
       if (isVisible) {
-        this.style.width = null ;
-      }else {
-        this.style.height = null ;
+        this.style.width = null;
+      } else {
+        this.style.height = null;
       }
 
-      return
+      return;
     }
 
-
-    var lengthStyle =  lineLength + "px" ;
+    var lengthStyle = lineLength + "px";
 
     if (isVisible) {
-      this.style.width = lengthStyle ;
-
-    }else {
-      this.style.height = lengthStyle ;
+      this.style.width = lengthStyle;
+    } else {
+      this.style.height = lengthStyle;
     }
-
-
   };
-
-
-
-
-
-
   /**
    * setNumberOfChars(charNumber)
    * 给元素设置相应的尺寸以使每行能刚好容纳指定的 字数
    * @param charNumber : number | undefined | null    字数 ; 当值为 undefined | null 时，清除之前关于字数的设置
    */
+
+
   Element.prototype.setNumberOfChars = function (charNumber) {
+    var isVisible = this.isVisible;
 
-    var isVisible = this.isVisible ;
-
-    if (charNumber == undefined) { //如果没传任何值；则清除相关的内联样式
-
+    if (charNumber == undefined) {
+      //如果没传任何值；则清除相关的内联样式
       if (isVisible) {
-        this.style.height = null ;
-      }else {
-        this.style.width = null ;
+        this.style.height = null;
+      } else {
+        this.style.width = null;
       }
-      return
-    }
 
+      return;
+    }
 
     var charLength = charNumber + "em";
-
-
     var compStyle = globalThis.getComputedStyle(this);
     var boxSizing = compStyle.boxSizing;
-    var isBorderBox = boxSizing == "border-box" ;
-
-
+    var isBorderBox = boxSizing == "border-box";
 
     if (isVisible) {
-
       if (isBorderBox) {
-
         var paddingTop = compStyle.paddingTop;
         var paddingBottom = compStyle.paddingBottom;
-
-        charLength = "calc( " + charLength + " + " + paddingTop + " + " + paddingBottom + " )" ;
+        charLength = "calc( " + charLength + " + " + paddingTop + " + " + paddingBottom + " )";
       }
 
-      this.style.height = charLength ;
-
-
-    }else {
-
+      this.style.height = charLength;
+    } else {
       if (isBorderBox) {
-
         var paddingLeft = compStyle.paddingLeft;
         var paddingRight = compStyle.paddingRight;
-
-        charLength = "calc( " + charLength + " + " + paddingLeft + " + " + paddingRight + " )" ;
+        charLength = "calc( " + charLength + " + " + paddingLeft + " + " + paddingRight + " )";
       }
 
-      this.style.width = charLength ;
-
+      this.style.width = charLength;
     }
-
-
   };
-
-
-
-
-
-
-
-
   /**
    * setNumberOfLinesAndChars(lineNumber,charNumber)
    * @param lineNumber : number | undefined | null    行数 ; 当值为 undefined | null 时，清除之前关于行数的设置
    * @param charNumber : number | undefined | null    字数 ; 当值为 undefined | null 时，清除之前关于字数的设置
    */
-  Element.prototype.setNumberOfLinesAndChars = function (lineNumber,charNumber) {
+
+
+  Element.prototype.setNumberOfLinesAndChars = function (lineNumber, charNumber) {
     this.setNumberOfLines(lineNumber);
     this.setNumberOfChars(charNumber);
-  };
-
-
-
-  //元素行字数：结束
+  }; //元素行字数：结束
 
   if (!globalThis.EventTarget) {
     /*
@@ -2786,11 +2696,11 @@
     * */
     globalThis.EventTarget = Object;
   }
-
-
   /*
   * 使用属性描述来定义属性，为了解决给 Object.prototype 添加属性会在Vue中报错的问题，需要将属性设置为不可枚举的；
   * */
+
+
   var propertyDescriptors$1$1 = {
     /**
      * 兼容方法：为事件添加事件处理器
@@ -2799,10 +2709,10 @@
      * @param useCapture : boolean 可选。布尔值，指定事件是否 在捕获或冒泡阶段执行。
      */
     byAddEventListener: {
-      configurable:true,
-      writable:true,
+      configurable: true,
+      writable: true,
       enumerable: false,
-      value: function (event, handler, useCapture) {
+      value: function value(event, handler, useCapture) {
         if (this.addEventListener) {
           this.addEventListener(event, handler, useCapture);
         } else if (this.attachEvent) {
@@ -2820,10 +2730,10 @@
      * @param useCapture : boolean 可选。布尔值，指定移除事件句柄的阶段。
      */
     byRemoveEventListener: {
-      configurable:true,
-      writable:true,
+      configurable: true,
+      writable: true,
       enumerable: false,
-      value: function (event, handler, useCapture) {
+      value: function value(event, handler, useCapture) {
         if (this.removeEventListener) {
           this.removeEventListener(event, handler, useCapture);
         } else if (this.attachEvent) {
@@ -2834,8 +2744,6 @@
       }
     },
 
-
-
     /**
      * 兼容方法：为多个事件添加事件处理器
      * @param eventList : Array<string> 必需。事件名称数组。注意： 不要使用 "on" 前缀。例如，使用 "click" 来取代 "onclick"。
@@ -2843,19 +2751,17 @@
      * @param useCapture : boolean 可选。布尔值，指定事件是否 在捕获或冒泡阶段执行。
      */
     byAddListenerForMultipleEvent: {
-      configurable:true,
-      writable:true,
+      configurable: true,
+      writable: true,
       enumerable: false,
-      value: function (eventList, handler, useCapture) {
-        var this$1 = this;
+      value: function value(eventList, handler, useCapture) {
+        var _this = this;
 
-        eventList.forEach(function (event){
-          this$1.byAddEventListener(event,handler,useCapture);
+        eventList.forEach(function (event) {
+          _this.byAddEventListener(event, handler, useCapture);
         });
       }
     },
-
-
 
     /**
      * 兼容方法：移除事件处理器
@@ -2864,21 +2770,17 @@
      * @param useCapture : boolean 可选。布尔值，指定移除事件句柄的阶段。
      */
     byRemoveListenerForMultipleEvent: {
-      configurable:true,
-      writable:true,
+      configurable: true,
+      writable: true,
       enumerable: false,
-      value: function (eventList, handler, useCapture) {
-        var this$1 = this;
+      value: function value(eventList, handler, useCapture) {
+        var _this2 = this;
 
-        eventList.forEach(function (event){
-          this$1.byRemoveEventListener(event,handler,useCapture);
+        eventList.forEach(function (event) {
+          _this2.byRemoveEventListener(event, handler, useCapture);
         });
       }
     },
-
-
-
-
 
     /**
      * 兼容方法：为单个事件添加多个事件处理器
@@ -2887,19 +2789,17 @@
      * @param useCapture : boolean 可选。布尔值，指定事件是否 在捕获或冒泡阶段执行。
      */
     byAddMultipleListenerForEvent: {
-      configurable:true,
-      writable:true,
+      configurable: true,
+      writable: true,
       enumerable: false,
-      value: function (event, handlerList, useCapture) {
-        var this$1 = this;
+      value: function value(event, handlerList, useCapture) {
+        var _this3 = this;
 
-        handlerList.forEach(function (handler){
-          this$1.byAddEventListener(event,handler,useCapture);
+        handlerList.forEach(function (handler) {
+          _this3.byAddEventListener(event, handler, useCapture);
         });
       }
     },
-
-
 
     /**
      * 兼容方法：移除事件处理器
@@ -2908,32 +2808,23 @@
      * @param useCapture : boolean 可选。布尔值，指定移除事件句柄的阶段。
      */
     byRemoveMultipleListenerForEvent: {
-      configurable:true,
-      writable:true,
+      configurable: true,
+      writable: true,
       enumerable: false,
-      value: function (event, handlerList, useCapture) {
-        var this$1 = this;
+      value: function value(event, handlerList, useCapture) {
+        var _this4 = this;
 
-        handlerList.forEach(function (handler){
-          this$1.byRemoveEventListener(event,handler,useCapture);
+        handlerList.forEach(function (handler) {
+          _this4.byRemoveEventListener(event, handler, useCapture);
         });
       }
-    },
-
-
-
-
+    }
   };
-
-
   Object.defineProperties(EventTarget.prototype, propertyDescriptors$1$1);
 
-  var fdPrototype = FormData.prototype;
+  var fdPrototype = FormData.prototype; // 在较低版本的浏览器中(比如：IOS10中的Safari)，FormData 类只有一个实例方法 append ，在这种情况下，只能把 set 操作 当作 append 来用
 
-
-
-  // 在较低版本的浏览器中(比如：IOS10中的Safari)，FormData 类只有一个实例方法 append ，在这种情况下，只能把 set 操作 当作 append 来用
-  if (!fdPrototype.set){
+  if (!fdPrototype.set) {
     fdPrototype.set = fdPrototype.append;
   }
 
@@ -2945,45 +2836,38 @@
    */
   Node.prototype.isChildNodeOf = function isChildNodeOf(node) {
     var parent = this.parentNode;
-    if (parent){
+
+    if (parent) {
       if (node.isSameNode(parent)) {
         return true;
-      }else {
+      } else {
         return parent.isChildNodeOf(node);
       }
     } else {
       return false;
     }
   };
-
-
-
-
-
   /**
    * isChildElementOf(element)
    * 判断 当前元素 是否是 其它元素element 的 子元素 或 后代元素
    * @param element : Node    被检测的元素
    * @returns boolean
    */
+
+
   Node.prototype.isChildElementOf = function isChildElementOf(element) {
     var parent = this.parentElement;
-    if (parent){
+
+    if (parent) {
       if (element.isSameNode(parent)) {
         return true;
-      }else {
+      } else {
         return parent.isChildElementOf(element);
       }
     } else {
       return false;
     }
-  };
-
-
-
-
-  //兼容：开始
-
+  }; //兼容：开始
 
   /**
    * contains(otherNode)
@@ -2991,13 +2875,13 @@
    * @param otherNode : Node      是否是当前节点的后代节点.
    * @returns boolean     如果 otherNode 是 node 的后代节点或是 node 节点本身.则返回true , 否则返回 false.
    */
+
+
   if (!Node.prototype.contains) {
     Node.prototype.contains = function contains(otherNode) {
       return this.isSameNode(otherNode) || otherNode.isChildNodeOf(this);
     };
-  }
-
-  //兼容：结束
+  } //兼容：结束
 
   /**
    * 接受一个键名和值作为参数，将会把键名添加到存储中，如果键名已存在，则更新其对应的值。
@@ -3029,11 +2913,11 @@
     "@babel/helpers - typeof";
 
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof$1 = function (obj) {
+      _typeof$1 = function _typeof(obj) {
         return typeof obj;
       };
     } else {
-      _typeof$1 = function (obj) {
+      _typeof$1 = function _typeof(obj) {
         return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
       };
     }
@@ -3076,78 +2960,6 @@
     }
 
     return obj;
-  }
-
-  function _unsupportedIterableToArray$1(o, minLen) {
-    if (!o) return;
-    if (typeof o === "string") return _arrayLikeToArray$1(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (n === "Map" || n === "Set") return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray$1(o, minLen);
-  }
-
-  function _arrayLikeToArray$1(arr, len) {
-    if (len == null || len > arr.length) len = arr.length;
-
-    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-
-    return arr2;
-  }
-
-  function _createForOfIteratorHelper$1(o) {
-    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
-      if (Array.isArray(o) || (o = _unsupportedIterableToArray$1(o))) {
-        var i = 0;
-
-        var F = function () {};
-
-        return {
-          s: F,
-          n: function () {
-            if (i >= o.length) return {
-              done: true
-            };
-            return {
-              done: false,
-              value: o[i++]
-            };
-          },
-          e: function (e) {
-            throw e;
-          },
-          f: F
-        };
-      }
-
-      throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-    }
-
-    var it,
-        normalCompletion = true,
-        didErr = false,
-        err;
-    return {
-      s: function () {
-        it = o[Symbol.iterator]();
-      },
-      n: function () {
-        var step = it.next();
-        normalCompletion = step.done;
-        return step;
-      },
-      e: function (e) {
-        didErr = true;
-        err = e;
-      },
-      f: function () {
-        try {
-          if (!normalCompletion && it.return != null) it.return();
-        } finally {
-          if (didErr) throw err;
-        }
-      }
-    };
   }
 
   //ByURL：开始
@@ -4351,6 +4163,11 @@
     return ByURLSearchParams;
   }();
 
+  function _createForOfIteratorHelper$1(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (o = _unsupportedIterableToArray$2(o))) { var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+  function _unsupportedIterableToArray$2(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray$2(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray$2(o, minLen); }
+
+  function _arrayLikeToArray$2(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
   /**
    * 通过把值转换成JSON字符来判断是否相等
    * @param value1 : any
@@ -4916,22 +4733,6 @@
     return caPromise;
   }
 
-  function _typeof$2(obj) {
-    "@babel/helpers - typeof";
-
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof$2 = function (obj) {
-        return typeof obj;
-      };
-    } else {
-      _typeof$2 = function (obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-      };
-    }
-
-    return _typeof$2(obj);
-  }
-
   function _objectWithoutPropertiesLoose(source, excluded) {
     if (source == null) return {};
     var target = {};
@@ -4949,9 +4750,7 @@
 
   function _objectWithoutProperties(source, excluded) {
     if (source == null) return {};
-
     var target = _objectWithoutPropertiesLoose(source, excluded);
-
     var key, i;
 
     if (Object.getOwnPropertySymbols) {
@@ -4966,6 +4765,22 @@
     }
 
     return target;
+  }
+
+  function _typeof$2(obj) {
+    "@babel/helpers - typeof";
+
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof$2 = function _typeof(obj) {
+        return typeof obj;
+      };
+    } else {
+      _typeof$2 = function _typeof(obj) {
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+      };
+    }
+
+    return _typeof$2(obj);
   }
 
   var propertyDescriptors$4 = {
@@ -5221,7 +5036,7 @@
           var _this = this;
 
           safelyIterate(this.keys(), function (key) {
-            _this.delete(key);
+            _this["delete"](key);
           });
         }
       },
