@@ -76,7 +76,7 @@ export default [
 			// 如果 pkg.browser 是字符串类型，则 file 为 pkg.browser，否则为 `<包名>.umd.js`
 			file: typeof pkg.browser === "string" ? pkg.browser : `dist/${removeScope(pkg.name)}.umd.js`,
 			format: 'umd',
-			name: toHumpFormat(pkg.name)  //驼峰格式的 pkg.name
+			name: "by"
 		}  // umd
 	}
 ];
