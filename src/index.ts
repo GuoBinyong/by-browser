@@ -3,3 +3,8 @@ import "dom-expand"
 import "bom-expand"
 export * from "com-tools"
 export * from "bro-tools"
+
+export * from "type-tls"
+export * from "url-tls"
+export * from "deep-tls"
+export * from "json-tls"
