@@ -1,8 +1,11 @@
-import "es-expand"
+import {removeScope,getBaseNameOfHumpFormat,getDependencieNames} from "package-tls";
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import typescript from 'rollup-plugin-typescript2';
+import typescript from '@rollup/plugin-typescript';
+import { terser } from "rollup-plugin-terser";
+import {dirname} from "path"
 import pkg from './package.json';
+import tsconfig from "./tsconfig.json";
 
 
 // 配置 ---------------------------------
@@ -18,9 +21,41 @@ import pkg from './package.json';
 共用的配置
 */
 
+
+
+
+const input = 'src/index.ts';   // 输入（入口）文件
+const outputDir = dirname(pkg.main || "dist/*");    //输出目录
+
+
+
+// rollup 中共用的 output 选项
+const shareOutput = {
+	// 要插入到生成文件顶部的字段串；
+	banner: `
+/*
+${pkg.name || ""}	${pkg.version? "v"+ pkg.version : ""}
+author: ${pkg.author || ""}
+license: ${pkg.license || ""}
+homepage: ${pkg.homepage || ""}
+repository: ${(pkg.repository && pkg.repository.url) || ""}
+description: ${pkg.description || ""}
+*/
+`,
+	// 要插入到生成文件底部的字段串；
+	// footer:"",
+
+	// 输出文件的存放目录；只用于会生成多个 chunks 的时候
+	dir:"./",
+	// 生成 chunks 名字的格式
+	entryFileNames:`${outputDir}/${removeScope(pkg.name)}.[format].js`
+};
+
+
+
 // 共用的 rollup 配置
 const shareConf = {
-	input: 'src/index.ts',
+	input: input,
 	external: getDependencieNames(pkg),  //移除 package.json 中所有的依赖包
 	plugins: [
 		// 使用node解析算法查找模块
@@ -39,7 +74,12 @@ const shareConf = {
 			extensions:['.ts', '.mjs', '.js', '.json', '.node']
 		}),
 		commonjs(), // 将依赖的模块从 CommonJS 模块规范转换成 ES2015 模块规范
-		typescript() // 将 TypeScript 转换为 JavaScript
+		typescript({
+			// 如果 tsconfig 中的 declarationDir 没有定义，则优先使用 package.json 中的 types 或 typings 定义的目录， 默认值：outputDir
+			declarationDir: tsconfig.declarationDir || dirname(pkg.types || pkg.typings || (outputDir+"/*")),
+			// 用来给 输出目录 outDir 提供源文件目录结构的，以便生成的文件中的导入导出能够正确地访问；
+			rootDir: dirname(input),
+		}) // 将 TypeScript 转换为 JavaScript
 	]
 };
 
@@ -56,8 +96,8 @@ export default [
 	{
 		...shareConf,
 		output: [
-			{ file: pkg.module || `dist/${removeScope(pkg.name)}.esm.js`, format: 'es' },  // ES module
-			{ file: pkg.main || `dist/${removeScope(pkg.name)}.cjs.js`, format: 'cjs' }, // CommonJS
+			{...shareOutput, format: 'es' },  // ES module
+			{...shareOutput, format: 'cjs' }, // CommonJS
 		]
 	},
 
@@ -66,63 +106,18 @@ export default [
 	兼容各种引入方式的构建
 	特点：
 	   - 可用 <script> 标签直接引入
-	   - 也可用 AMD、CommonJS 的模块化方案引入；
+	   - 也可用 AMD、CommonJS 的模块化方案引入
 	   - 将所有依赖都构建在了一起
+	   - 对代码进行了压缩
 	*/
 	{
 		...shareConf,
-		external:undefined,   //不移除任何依赖
+        external:getDependencieNames(pkg,"peerDependencies"),   //只移除 peerDependencies 中的依赖
 		output: {
-			// 如果 pkg.browser 是字符串类型，则 file 为 pkg.browser，否则为 `<包名>.umd.js`
-			file: typeof pkg.browser === "string" ? pkg.browser : `dist/${removeScope(pkg.name)}.umd.js`,
+			...shareOutput,
 			format: 'umd',
-			name: "by"
+			name: "by",  //驼峰格式的 pkg.name
+			plugins: [terser()]     //压缩代码
 		}  // umd
 	}
 ];
-
-
-
-
-
-
-
-
-
-
-
-// 工具 ---------------------------------
-
-
-/**
- * Remove the scope prefix for the package name
- * 去除包名的 scope 前缀
- *
- * @param  pkgName : string    name of the package 包的名字
- * @returns string  Return the name after removing the scope prefix  返回去除 scope 前缀后的名字
- */
-function removeScope(pkgName) {return pkgName.replace(/@[^/]+\//,"")}
-
-
-/**
- * convert the name of the package from a divider format to a hump format, and the scope prefix is automatically removed
- * 把包的名字从分隔线格式转换成驼峰格式，并且会自动去除 scope 前缀
- *
- * @param  pkgName : string    name of the package 包的名字
- * @param separators ?: string | Array<string>   optional; default: ["-","_"] ; separator or separator good array ["-","_"]； 可选；默认值：["-","_"] ；分隔符，或 包含多个分隔符的数组
- * @returns string  return hump format string  返回驼峰格式的字符串
- */
-function toHumpFormat(pkgName, separators) {return removeScope(pkgName).toHumpFormat(separators)}
-
-
-/**
- * 获取 package.json 中配置的指定依赖类型中的所有依赖的名字列表
- * Get a list of names for all dependencies in the specified dependency type configured in package.json
- * @param package:object  必选；package.json 中的配置对象； Configuration objects in package.json
- * @param depTypes?: string | string[]    可选；默认值：["dependencies","optionalDependencies","peerDependencies"]；依赖类型的名字 或者 名字数组；     Optional; default: ["dependencies","optionalDependencies","peerDependencies"];
- * @returns Array<string>  返回包含指定依赖类型中的所有依赖名字的数组； Returns an array of all dependent names in the specified dependency type
- */
-function getDependencieNames(packageConf,depTypes){
-	depTypes = depTypes ? (typeof depTypes === "string" ? [depTypes] : depTypes) : ["dependencies","optionalDependencies","peerDependencies"];
-	return Object.keys(Object.assign({},...depTypes.map(depType=>packageConf[depType])));
-}
