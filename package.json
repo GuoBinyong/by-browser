@@ -58,13 +58,13 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "bom-expand": "^1.0.12",
+    "bom-expand": "^1.0.13",
     "bro-tools": "^1.0.11",
-    "com-tools": "^2.0.0",
-    "deep-tls": "^1.0.0",
+    "com-tools": "^2.1.0",
+    "deep-tls": "^1.1.0",
     "dom-expand": "^1.0.6",
-    "es-expand": "^2.0.0",
-    "json-tls": "^1.1.0",
+    "es-expand": "^2.1.0",
+    "json-tls": "^1.1.1",
     "type-tls": "^2.0.2",
     "url-tls": "^1.0.1"
   }
