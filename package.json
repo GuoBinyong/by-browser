@@ -1,6 +1,6 @@
 {
   "name": "by-browser",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "by-browser 包含了 es-expand、dom-expand、bom-expand、com-tools、bro-tools、url-tls、deep-tls、type-tls、json-tls 等，提供了浏览器中原生类型功能的扩展 和 一些实用的工具函数",
   "main": "dist/by-browser.cjs.js",
   "module": "dist/by-browser.es.js",
